@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrax - Create Roadmap</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">SkillTrax</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('create_roadmap')}}" class="active">Create Roadmap</a>
+                <a href="#">Roadmaps</a>
+                <a href="#">Profile</a>
+            </div>
+            <div class="user-menu">
+                <span>Welcome, {{ user.name }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <div class="home-container">
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="roadmap-creation-container">
+                <h1>Create New Learning Roadmap</h1>
+                <p class="subtitle">Fill in the details below to generate your personalized learning path</p>
+
+                <!-- Flash Messages Display -->
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                    <div class="flash-message">
+                        <span class="material-icons">error</span>
+                        <span>{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <form class="roadmap-form" action="{{ url_for('create_roadmap') }}" method="POST" id="roadmapForm">
+                    <div class="form-group">
+                        <label>Subject Area</label>
+                        <input type="text" name="subject" placeholder="Subject" id="subject">
+                        <span class="error-message" id="subjectError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Current Knowledge Level</label>
+                        <div class="knowledge-level-options">
+                            <label class="level-option">
+                                <input type="radio" name="level" value="beginner" required>
+                                <div class="level-content">
+                                    <span class="material-icons">psychology</span>
+                                    <span>Beginner</span>
+                                </div>
+                            </label>
+                            <label class="level-option">
+                                <input type="radio" name="level" value="intermediate">
+                                <div class="level-content">
+                                    <span class="material-icons">school</span>
+                                    <span>Intermediate</span>
+                                </div>
+                            </label>
+                            <label class="level-option">
+                                <input type="radio" name="level" value="advanced">
+                                <div class="level-content">
+                                    <span class="material-icons">workspace_premium</span>
+                                    <span>Advanced</span>
+                                </div>
+                            </label>
+                        </div>
+                        <span class="error-message" id="levelError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Learning Goals</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="goals" value="exam preparation" class="goal-checkbox">
+                                <span>Exam Preparation</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="goals" value="career development" class="goal-checkbox">
+                                <span>Career Development</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="goals" value="personal interest" class="goal-checkbox">
+                                <span>Personal Interest</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="goals" value="professional certification"
+                                    class="goal-checkbox">
+                                <span>Professional Certification</span>
+                            </label>
+                        </div>
+                        <span class="error-message" id="goalsError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Custom Requirements (Optional)</label>
+                        <textarea name="custom_requirements"
+                            placeholder="Add any specific requirements or preferences..."></textarea>
+                    </div>
+
+                    <div class="time-commitment-section">
+                        <div class="form-group">
+                            <label>Hours per week</label>
+                            <input type="number" name="hours_per_week" placeholder="e.g. 10" min="1" max="168">
+                        </div>
+                        <div class="form-group">
+                            <label>Target completion (weeks)</label>
+                            <input type="number" name="target_completion" placeholder="e.g. 12" min="1" max="52">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="generate-roadmap-btn">
+                        <span class="material-icons">route</span>
+                        Generate Roadmap
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                themeIcon.textContent = 'dark_mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-theme');
+                themeIcon.textContent = 'light_mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check for saved theme preference
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('themeIcon');
+
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeIcon.textContent = 'light_mode';
+            }
+
+            // Client-side validation
+            const form = document.getElementById('roadmapForm');
+            const subjectInput = document.getElementById('subject');
+            const subjectError = document.getElementById('subjectError');
+            const levelError = document.getElementById('levelError');
+            const goalsError = document.getElementById('goalsError');
+
+            form.addEventListener('submit', function (e) {
+                let isValid = true;
+
+                // Clear previous error messages
+                subjectError.textContent = '';
+                levelError.textContent = '';
+                goalsError.textContent = '';
+
+                // Validate subject
+                if (!subjectInput.value.trim()) {
+                    subjectError.textContent = 'Subject is required';
+                    isValid = false;
+                }
+
+                // Validate level selection
+                const levelSelected = document.querySelector('input[name="level"]:checked');
+                if (!levelSelected) {
+                    levelError.textContent = 'Please select a knowledge level';
+                    isValid = false;
+                }
+
+                // Validate goals
+                const goalsSelected = document.querySelectorAll('.goal-checkbox:checked');
+                if (goalsSelected.length === 0) {
+                    goalsError.textContent = 'Please select at least one learning goal';
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

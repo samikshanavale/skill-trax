@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrax - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">SkillTrax</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+                <a href="{{ url_for('create_roadmap')}}">Create Roadmap</a>
+                <a href="#">Roadmaps</a>
+                <a href="#">Profile</a>
+            </div>
+            <div class="user-menu">
+                <span>Welcome, {{ user.name }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <h1>Welcome to your SkillTrax Dashboard</h1>
+        <p>Your personalized learning journey has begun!</p>
+
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Courses Enrolled</h3>
+                <p class="stat-number">{{ user.enrolled_courses }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Skills in Progress</h3>
+                <p class="stat-number">{{ user.skills_in_progress }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Completed Paths</h3>
+                <p class="stat-number">{{ user.completed_paths }}</p>
+            </div>
+        </div>
+
+        <!-- Search Bar and Filters -->
+        <div class="search-section">
+            <div class="search-bar">
+                <span class="material-icons">search</span>
+                <input type="text" id="search-input" placeholder="Search roadmaps..." onkeyup="filterRoadmaps()">
+            </div>
+            <div class="filters">
+                <select id="subject-filter" class="filter-select" onchange="filterRoadmaps()">
+                    <option value="">All Subjects</option>
+                    <option value="programming">Programming</option>
+                    <option value="design">Design</option>
+                    <option value="business">Business</option>
+                </select>
+                <select id="level-filter" class="filter-select" onchange="filterRoadmaps()">
+                    <option value="">All Levels</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button id="create-roadmap-btn" class="create-roadmap-btn"><span
+                    class="material-icons">add_circle</span>Create Roadmap</button>
+            <button id="upload-syllabus-btn" class="upload-syllabus-btn"><span
+                    class="material-icons">upload_file</span>Upload Syllabus</button>
+        </div>
+
+        <!-- Roadmaps Grid -->
+        <div class="roadmaps-grid">
+            {% if has_roadmaps %}
+            {% for roadmap in roadmaps %}
+            <div class="roadmap-card" data-category="{{ roadmap.category.lower() }}"
+                data-title="{{ roadmap.title.lower() }}" data-id="{{ roadmap.id }}">
+                <div class="roadmap-tag">{{ roadmap.category }}</div>
+                <h3>{{ roadmap.title }}</h3>
+                <p>{{ roadmap.description }}</p>
+                <div class="roadmap-footer">
+                    <div class="progress-info"><span class="material-icons progress-icon">check_circle</span>{{
+                        roadmap.progress }}% Complete</div>
+                    <span class="material-icons">chevron_right</span>
+                </div>
+                <div class="creation-date">Created {{ roadmap.created_at.strftime('%d %b %Y') }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No roadmaps found. Start your journey now!</p>
+            {% endif %}
+        </div>
+
+        <!-- Recommended Courses -->
+        <div class="recommended-section">
+            <h2>Recommended for You</h2>
+            <p>Based on your goals, we suggest these learning paths:</p>
+
+            <div class="recommendation-cards">
+                <div class="course-card">
+                    <div class="course-image"></div>
+                    <h3>Web Development Fundamentals</h3>
+                    <p>Master HTML, CSS, and JavaScript</p><button class="enroll-btn">Enroll Now</button>
+                </div>
+                <div class="course-card">
+                    <div class="course-image"></div>
+                    <h3>Python Programming</h3>
+                    <p>Learn Python from beginner to pro</p><button class="enroll-btn">Enroll Now</button>
+                </div>
+                <div class="course-card">
+                    <div class="course-image"></div>
+                    <h3>Data Science Essentials</h3>
+                    <p>Start your journey into data science</p><button class="enroll-btn">Enroll Now</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="logo">SkillTrax</div>
+                <p>Track your learning journey and create new roadmaps.</p>
+            </div>
+            <div class="footer-right"><a href="#">About</a><a href="#">Privacy</a><a href="#">Terms</a><a
+                    href="#">Contact</a></div>
+        </div>
+    </footer>
+
+    <script>
+        // Search & Filter Functionality
+        function filterRoadmaps() {
+            let searchQuery = document.getElementById("search-input").value.toLowerCase();
+            let subjectFilter = document.getElementById("subject-filter").value.toLowerCase();
+
+            let roadmaps = document.querySelectorAll(".roadmap-card");
+
+            roadmaps.forEach(roadmap => {
+                let title = roadmap.getAttribute("data-title");
+                let category = roadmap.getAttribute("data-category");
+
+                let matchesSearch = title.includes(searchQuery) || searchQuery === "";
+                let matchesCategory = category.includes(subjectFilter) || subjectFilter === "";
+
+                roadmap.style.display = (matchesSearch && matchesCategory) ? "block" : "none";
+            });
+        }
+
+        // Modal functionality
+        document.getElementById('create-roadmap-btn').addEventListener('click', function () {
+            window.location.href = "{{ url_for('create_roadmap') }}";
+        });
+
+        document.getElementById('upload-syllabus-btn').addEventListener('click', function () {
+            window.location.href = "{{ url_for('syllabus') }}";
+        });
+
+        // Roadmap card interactivity - updated to redirect instead of alert
+        document.querySelectorAll('.roadmap-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const roadmapId = this.getAttribute('data-id');
+                window.location.href = "{{ url_for('view_roadmap', roadmap_id=0) }}".replace('0', roadmapId);
+            });
+        });
+    </script>
+</body>
+
+</html>

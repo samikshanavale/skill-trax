@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrax - Create Account</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="nav-left" style="margin-bottom: 32px;">
+            <a href="index.html" class="logo">
+                <span class="material-icons">school</span>
+                SkillTrax
+            </a>
+        </div>
+        
+        <h1>Create your account</h1>
+        <p class="subtitle">Start your learning journey with SkillTrax</p>
+        
+        <form class="registration-form">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="Create a password" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" placeholder="Confirm your password" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Profession</label>
+                <select required>
+                    <option value="" disabled selected>Select your profession</option>
+                    <option value="student">Student</option>
+                    <option value="professional">Professional</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Organization/Institution (Optional)</label>
+                <input type="text" placeholder="Enter your organization">
+            </div>
+            
+            <div class="terms-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a></label>
+            </div>
+            
+            <button type="submit" class="create-account-btn">Create Account</button>
+            
+            <p class="signin-prompt">
+                Already have an account? <a href="index.html">Sign in</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html> 

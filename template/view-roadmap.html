@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrax - {{ roadmap.title }} Roadmap</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --completed-color: #10b981;
+            --progress-color: #3b82f6;
+            --locked-color: #9ca3af;
+            --border-color: #e5e7eb;
+            --background-color: #f9fafb;
+            --card-background: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--card-background);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background-color: transparent;
+            color: var(--text-color);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        /* Main Content */
+        main {
+            padding: 30px 0;
+        }
+
+        .roadmap-header {
+            margin-bottom: 30px;
+        }
+
+        .roadmap-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .roadmap-description {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .roadmap-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .status-tag {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-tag.completed {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--completed-color);
+        }
+
+        .status-tag.in-progress {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--progress-color);
+        }
+
+        .status-tag.not-started {
+            background-color: rgba(156, 163, 175, 0.1);
+            color: var(--locked-color);
+        }
+
+        .progress-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Roadmap Steps */
+        .roadmap-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .roadmap-step {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .roadmap-step.completed {
+            border-left: 4px solid var(--completed-color);
+        }
+
+        .roadmap-step.in_progress {
+            border-left: 4px solid var(--progress-color);
+        }
+
+        .roadmap-step.locked {
+            border-left: 4px solid var(--locked-color);
+            opacity: 0.8;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .step-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .step-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .step-status.completed {
+            color: var(--completed-color);
+        }
+
+        .step-status.in-progress {
+            color: var(--progress-color);
+        }
+
+        .step-status.locked {
+            color: var(--locked-color);
+        }
+
+        .step-content {
+            padding: 20px;
+        }
+
+        .step-description {
+            margin-bottom: 15px;
+        }
+
+        .step-level {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .video-btn {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary-color);
+            border: none;
+        }
+
+        .video-btn:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .quiz-btn {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--completed-color);
+            border: none;
+        }
+
+        .quiz-btn:hover {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .complete-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .complete-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .reset-btn {
+            background-color: white;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .reset-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .disabled:hover {
+            background-color: initial;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .step-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span class="material-icons logo-icon">school</span>
+                    SkillTrax
+                </div>
+                <div class="nav-links">
+                    <a href="{{ url_for('dashboard') }}">Home</a>
+                    <a href="#" class="active">Roadmaps</a>
+                    <a href="#">Syllabus Pro</a>
+                    <a href="#">Profile</a>
+                </div>
+                <div class="user-menu">
+                    <a href="{{ url_for('logout') }}" class="logout-btn">
+                        <span class="material-icons">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="roadmap-header">
+                <h1 class="roadmap-title">{{ roadmap.title }} Roadmap</h1>
+                <p class="roadmap-description">{{ roadmap.description or "Description of subject" }}</p>
+
+                <div class="roadmap-status">
+                    {% if progress == 100 %}
+                    <span class="status-tag completed">Completed</span>
+                    {% elif progress > 0 %}
+                    <span class="status-tag in-progress">In Progress</span>
+                    {% else %}
+                    <span class="status-tag not-started">Not Started</span>
+                    {% endif %}
+                    <span class="progress-text">Progress: {{ progress }}%</span>
+                </div>
+            </div>
+
+            <div class="roadmap-steps">
+                {% for step in steps %}
+                <div class="roadmap-step {{ step.status }}">
+                    <div class="step-header">
+                        <h3>{{ step.title }}</h3>
+                        <div class="step-status {{ step.status }}">
+                            {% if step.status == 'completed' %}
+                            <span class="material-icons">check_circle</span>
+                            <span>Completed</span>
+                            {% elif step.status == 'in_progress' %}
+                            <span class="material-icons">pending</span>
+                            <span>In Progress</span>
+                            {% else %}
+                            <span class="material-icons">lock</span>
+                            <span>Locked</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <p class="step-description">{{ step.description }}</p>
+                        <p class="step-level">Level: {{ step.level }}</p>
+
+                        <div class="step-actions">
+                            {% if step.resource_link %}
+                            <a href="{{ step.resource_link }}" target="_blank"
+                                class="action-btn video-btn {% if step.status == 'locked' %}disabled{% endif %}">
+                                <span class="material-icons">play_circle</span>
+                                Video Tutorial
+                            </a>
+                            {% endif %}
+
+                            <a href="#" class="action-btn quiz-btn {% if step.status == 'locked' %}disabled{% endif %}">
+                                <span class="material-icons">quiz</span>
+                                Quiz
+                            </a>
+
+                            {% if step.status == 'in_progress' %}
+                            <button class="action-btn complete-btn" data-step-id="{{ step.id }}">
+                                <span class="material-icons">check_circle</span>
+                                Mark Complete
+                            </button>
+                            {% elif step.status == 'completed' %}
+                            <button class="action-btn reset-btn" data-step-id="{{ step.id }}">
+                                <span class="material-icons">restart_alt</span>
+                                Reset Step
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Add event listeners for step completion buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.complete-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const stepId = this.getAttribute('data-step-id');
+                    updateStepStatus(stepId, 'completed');
+                });
+            });
+
+            // Add event listeners for step reset buttons
+            document.querySelectorAll('.reset-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const stepId = this.getAttribute('data-step-id');
+                    updateStepStatus(stepId, 'in_progress');
+                });
+            });
+        });
+
+        // Function to update step status via AJAX
+        function updateStepStatus(stepId, status) {
+            fetch(`/update_step/${stepId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: status }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reload the page to show updated status
+                        window.location.reload();
+                    } else {
+                        alert('Failed to update step status');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the step');
+                });
+        }
+    </script>
+</body>
+
+</html>

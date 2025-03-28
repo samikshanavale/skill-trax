@@ -551,17 +551,17 @@ from werkzeug.routing import BaseConverter, ValidationError
 
 # app.url_map.converters['urlpath'] = URLPathConverter
 
-@app.route("/quiz/<string:url>")
-def quiz(url):
-    # Decode back to original URL
-    url = url.replace('__SLASH__', '/').replace('__QUESTION__', '?')
-    quiz = asyncio.run(generate_quiz(url))
-    print(quiz)
-    return render_template("quiz.html", 
-                           quiz=quiz, 
-                           step_url=url,
-                           roadmap_title=quiz.get('roadmap_title', 'Quiz'),
-                           step_title=quiz.get('step_title', 'Current Step'))
+# @app.route("/quiz/<string:url>")
+# def quiz(url):
+#     # Decode back to original URL
+#     url = url.replace('__SLASH__', '/').replace('__QUESTION__', '?')
+#     quiz = asyncio.run(generate_quiz(url))
+#     print(quiz)
+#     return render_template("quiz.html", 
+#                            quiz=quiz, 
+#                            step_url=url,
+#                            roadmap_title=quiz.get('roadmap_title', 'Quiz'),
+#                            step_title=quiz.get('step_title', 'Current Step'))
 
 
 # Run App

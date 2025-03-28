@@ -15,7 +15,7 @@ import tempfile
 from pprint import pprint
 import datetime
 from syllabus_pro import generator_pro
-from quiz_generator import generate_quiz
+# from quiz_generator import generate_quiz
 import asyncio
 
 # Initialize Flask app

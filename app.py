@@ -477,53 +477,57 @@ def upload_syllabus():
         file.save(temp_path)
         
         try:
-            # Execute generator_pro method
             roadmap_response = generator_pro(temp_path)
+            print("here")
+            pprint(roadmap_response)
+            
+            # Execute generator_pro method
+            # roadmap_response = generator_pro(temp_path)
             # print("here")
             # pprint(roadmap_response)
             
             # Save roadmap steps to database
-            if roadmap_response and 'roadmap' in roadmap_response:
+            # if roadmap_response and 'roadmap' in roadmap_response:
 
-                # If validation passes, create the roadmap
-                new_roadmap = Roadmap(
-                    title=roadmap_response['subject'],
-                    description = roadmap_response['subject_desc'],
-                    category=roadmap_response['subject'],
-                    level="beginner",
-                    goals="exam preparation",
-                    custom_requirements= "Syllabus",
-                    target_completion= None,
-                    progress=0,
-                    user_id=user.id,
-                )
+                # # If validation passes, create the roadmap
+                # new_roadmap = Roadmap(
+                #     title=roadmap_response['subject'],
+                #     description = roadmap_response['subject_desc'],
+                #     category=roadmap_response['subject'],
+                #     level="beginner",
+                #     goals="exam preparation",
+                #     custom_requirements= "Syllabus",
+                #     target_completion= None,
+                #     progress=0,
+                #     user_id=user.id,
+                # )
 
-                db.session.add(new_roadmap)
-                db.session.commit()
+                # db.session.add(new_roadmap)
+                # db.session.commit()
 
-                steps = roadmap_response['roadmap']
-                for i, step in enumerate(steps):
-                    # Set the first step to 'in_progress' and others to 'locked'
-                    status = 'in_progress' if i == 0 else 'locked'
+                # steps = roadmap_response['roadmap']
+                # for i, step in enumerate(steps):
+                #     # Set the first step to 'in_progress' and others to 'locked'
+                #     status = 'in_progress' if i == 0 else 'locked'
                 
-                    roadmap_step = RoadmapStep(
-                        roadmap_id=new_roadmap.id,
-                        title=step['title'],
-                        description=step['description'],
-                        level=step['level'],
-                        resource_link=step.get('res_link', ''),
-                        order=i,
-                        status=status
-                    )
-                    db.session.add(roadmap_step)
+                #     roadmap_step = RoadmapStep(
+                #         roadmap_id=new_roadmap.id,
+                #         title=step['title'],
+                #         description=step['description'],
+                #         level=step['level'],
+                #         resource_link=step.get('res_link', ''),
+                #         order=i,
+                #         status=status
+                #     )
+                #     db.session.add(roadmap_step)
 
-                db.session.commit()
+                # db.session.commit()
 
-                flash("Roadmap created successfully!")
-                return redirect(url_for('view_roadmap', roadmap_id=new_roadmap.id))
-            else:
-                flash("Failed to generate roadmap. Please try again.")
-                return render_template("create-roadmap.html", user=user) 
+                # flash("Roadmap created successfully!")
+                # return redirect(url_for('view_roadmap', roadmap_id=new_roadmap.id))
+            # else:
+            #     flash("Failed to generate roadmap. Please try again.")
+            #     return render_template("create-roadmap.html", user=user) 
         except Exception as e:
             # Log the error and flash a message
             print(f"Error processing syllabus: {str(e)}")

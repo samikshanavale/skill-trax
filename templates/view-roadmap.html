@@ -424,7 +424,7 @@
                 const encodedUrl = resourceLink
                     .replace(/\//g, '__SLASH__')
                     .replace(/\?/g, '__QUESTION__');
-                window.location.href = "{{ url_for('quiz', url='0') }}".replace('0', encodedUrl);
+                window.location.href = "#".replace('0', encodedUrl);
             });
         });
 

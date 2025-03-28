@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - SkillTrax</title>
+
+    <!-- Bootstrap for styling and responsiveness -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        /* Basic styling for the page */
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            padding: 6px 0;
+        }
+
+        .navbar-brand {
+            color: #007bff !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 12px;
+        }
+
+        .nav-link {
+            color: #343a40 !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #007bff !important;
+        }
+
+        /* Quiz container where the main content is */
+        .quiz-container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Styling for the question text */
+        .question {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        /* Answer options */
+        .option {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Button for navigating to the next question */
+        .btn-primary {
+            width: 100%;
+            font-size: 1.2rem;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        /* Timer display */
+        .timer {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #dc3545;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <p>{{quiz['quiz'][0]}}</p>
+
+    <!-- Navigation Bar -->
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">SkillTrax</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Roadmaps</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Syllabus Pro</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Quiz Section -->
+    <div class="container mt-4">
+        <div class="quiz-container">
+            <div class="timer">Time Remaining: <span id="time">10:00</span></div>
+            <h3 class="text-center">C# Quiz</h3>
+            <p class="text-muted text-center">Question 1 of 10</p>
+
+            <div class="question mb-3">What is the correct way to declare a variable in C#?</div>
+
+            <div class="list-group">
+                <div class="list-group-item option">A. var x = 10;</div>
+                <div class="list-group-item option">B. int x := 10;</div>
+                <div class="list-group-item option">C. x = 10;</div>
+                <div class="list-group-item option">D. let x = 10;</div>
+            </div>
+
+            <button class="btn btn-primary mt-3">Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        // Timer setup (starts from 10 minutes)
+        let timeLeft = 600; // 600 seconds = 10 minutes
+        const timerElement = document.getElementById('time');
+
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft > 0) {
+                timeLeft--; // Decrease time
+            } else {
+                alert("Time's up!"); // Alert when time runs out
+            }
+        }
+
+        setInterval(updateTimer, 1000); // Update timer every second
+    </script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

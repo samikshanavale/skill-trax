@@ -389,7 +389,8 @@
                             </a>
                             {% endif %}
 
-                            <a href="#" class="action-btn quiz-btn {% if step.status == 'locked' %}disabled{% endif %}">
+                            <a href="#" class="action-btn quiz-btn {% if step.status == 'locked' %}disabled{% endif %}"
+                                data-resource-link="{{ step.resource_link }}">
                                 <span class="material-icons">quiz</span>
                                 Quiz
                             </a>
@@ -414,6 +415,19 @@
     </main>
 
     <script>
+
+        document.querySelectorAll('.quiz-btn').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const resourceLink = this.getAttribute('data-resource-link');
+                // Replace slashes and question marks with special markers
+                const encodedUrl = resourceLink
+                    .replace(/\//g, '__SLASH__')
+                    .replace(/\?/g, '__QUESTION__');
+                window.location.href = "{{ url_for('quiz', url='0') }}".replace('0', encodedUrl);
+            });
+        });
+
         // Add event listeners for step completion buttons
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.complete-btn').forEach(button => {

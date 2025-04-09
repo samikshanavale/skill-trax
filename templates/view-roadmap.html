@@ -6,31 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillTrax - {{ roadmap.title }} Roadmap</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2563eb;
+            --primary-color: #3498db;
             --completed-color: #10b981;
-            --progress-color: #3b82f6;
+            --progress-color: #3498db;
             --locked-color: #9ca3af;
             --border-color: #e5e7eb;
             --background-color: #f9fafb;
             --card-background: #ffffff;
             --text-color: #1f2937;
             --text-secondary: #6b7280;
+            --border-radius: 8px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif, Tahoma, Geneva, Verdana, 'Inter';
         }
+
 
         body {
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.5;
+
+        }
+
+        header {
+            background-color: var(--card-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .container {
@@ -42,7 +55,7 @@
         /* Header */
         header {
             background-color: var(--card-background);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             padding: 15px 0;
             position: sticky;
             top: 0;
@@ -53,31 +66,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 40px !important;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+
         }
 
         .logo {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: bold;
             color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .logo-icon {
-            color: var(--primary-color);
-        }
+
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 1.5rem;
         }
 
         .nav-links a {
-            color: var(--text-color);
             text-decoration: none;
+            color: var(--text-color);
+            font-size: 15px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            position: relative;
+            transition: color 0.3s;
+
         }
 
         .nav-links a:hover,
@@ -85,22 +101,56 @@
             color: var(--primary-color);
         }
 
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .nav-middle {
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 8px;
+        }
+
+        .nav-middle::-webkit-scrollbar {
+            display: none;
+        }
+
         .user-menu {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 1rem;
+        }
+
+        .user-menu span {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .logout-btn:hover {
+            /* background-color: #e9ecef; */
+            background-color: #c0392b;
         }
 
         .logout-btn {
-            background-color: transparent;
-            color: var(--text-color);
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            font-weight: 500;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
             text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         /* Main Content */
@@ -318,26 +368,21 @@
 
 <body>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <span class="material-icons logo-icon">school</span>
-                    SkillTrax
-                </div>
-                <div class="nav-links">
-                    <a href="{{ url_for('dashboard') }}">Home</a>
-                    <a href="#" class="active">Roadmaps</a>
-                    <a href="#">Syllabus Pro</a>
-                    <a href="#">Profile</a>
-                </div>
-                <div class="user-menu">
-                    <a href="{{ url_for('logout') }}" class="logout-btn">
-                        <span class="material-icons">logout</span>
-                        Logout
-                    </a>
-                </div>
-            </nav>
-        </div>
+        <nav>
+            <div class="logo">SkillTrax</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+                <a href="{{ url_for('create_roadmap')}}">Create Roadmap</a>
+                <a href="{{ url_for('syllabus') }}">
+                    <i class="fas fa-crown"></i> Syllabus pro
+                </a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+            </div>
+            <div class="user-menu">
+                <span>Welcome, {{ user.name }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </nav>
     </header>
 
     <main>
@@ -389,7 +434,8 @@
                             </a>
                             {% endif %}
 
-                            <a href="#" class="action-btn quiz-btn {% if step.status == 'locked' %}disabled{% endif %}">
+                            <a href="#" class="action-btn quiz-btn {% if step.status == 'locked' %}disabled{% endif %}"
+                                step-id="{{ step.id }}">
                                 <span class="material-icons">quiz</span>
                                 Quiz
                             </a>
@@ -414,6 +460,35 @@
     </main>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Detect if the page was loaded from back/forward navigation
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.quiz-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    // Only proceed if button is not disabled
+                    if (!this.classList.contains('disabled')) {
+                        event.preventDefault();
+                        // Show loading overlay
+                        document.getElementById('loadingOverlay').style.display = 'flex';
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.quiz-btn').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const step_id = this.getAttribute('step-id');
+                // Replace slashes and question marks with special markers
+                window.location.href = "{{ url_for('quiz', step_id='0') }}".replace('0', step_id);
+            });
+        });
+
         // Add event listeners for step completion buttons
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.complete-btn').forEach(button => {
@@ -430,6 +505,9 @@
                     updateStepStatus(stepId, 'in_progress');
                 });
             });
+        });
+        window.addEventListener('load', function () {
+            document.getElementById('loadingOverlay').style.display = 'none';
         });
 
         // Function to update step status via AJAX
@@ -455,7 +533,28 @@
                     alert('An error occurred while updating the step');
                 });
         }
+
     </script>
+    <!-- Loading Overlay (hidden by default) -->
+    <div id="loadingOverlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;">
+        <div
+            style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #2563eb; border-radius: 50%; animation: spin 1s linear infinite;">
+        </div>
+        <p style="margin-top: 20px; font-size: 1.2rem; color: #333;">Generating Quiz for you..</p>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </body>
 
 </html>
